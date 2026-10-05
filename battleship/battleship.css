@@ -1,0 +1,11 @@
+h3{text-align:center;font:700 1.1rem Georgia,serif;margin:14px 0 4px}
+.bs{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;max-width:420px;margin:6px auto 14px;background:var(--accent);padding:4px;border-radius:10px}
+.bc{aspect-ratio:1;border:0;padding:0;border-radius:3px;background:var(--hole);position:relative;min-height:0}
+.bc.ship{background:color-mix(in srgb,var(--text) 55%,var(--bg))}
+.bc.miss::after{content:"";position:absolute;inset:38%;border-radius:50%;background:var(--muted)}
+.bc.hit,.bc.sunk{background:var(--p0)}
+.bc.sunk{background:color-mix(in srgb,var(--p0) 55%,#000)}
+.bc.hit::after,.bc.sunk::after{content:"✕";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.8rem}
+#enemy.mine .bc:not(.hit):not(.miss):not(.sunk):hover{background:color-mix(in srgb,var(--hole),var(--text) 25%)}
+.sb.placed{opacity:.55}
+.sb.sel{background:var(--accent);border-color:var(--accent-hi);color:#fff;opacity:1}

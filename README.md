@@ -14,6 +14,7 @@ No accounts, no backend, no installs. Relaydo is a static website (plain HTML, C
 
 | Game | Players |
 |------|---------|
+| Battleship | 2 (place ships by hand or with **Random**) |
 | Connect 4 | 2 |
 | Tic-tac-toe | 2 |
 
@@ -49,7 +50,11 @@ relaydo/
 │   ├── theme.js        theme toggle and Home button
 │   ├── net.js          Nostr networking (shared by all games)
 │   └── shell.js        toolbar, host/join lobby, handshake (shared)
-├── connect4/           one folder per game
+├── battleship/         one folder per game
+│   ├── index.html
+│   ├── battleship.js
+│   └── battleship.css
+├── connect4/
 │   ├── index.html
 │   ├── connect4.js
 │   └── connect4.css
@@ -92,13 +97,14 @@ To test with two players, open the invite link in a second browser (or a private
    });
    shell.addButton('Rematch', () => { /* extra toolbar buttons */ });
    ```
-3. Add a card for it in the root `index.html`.
+3. Add a card for it in the root `index.html` (cards are kept in alphabetical order).
 
 ## Known limitations
 
 - **Public relays can be flaky or rate-limited.** The lobby shows how many relays are connected.
 - **Closing a tab isn't detected.** Pressing **Leave** (or Home) notifies the opponent, but a silently closed tab or dropped connection doesn't. A heartbeat for this exists in `js/shell.js` and is commented out.
 - **No reconnecting or saved games.** If a player reloads mid-game, the game is over.
+- **Battleship is trust-based.** Each player's browser holds their own fleet and answers the opponent's shots honestly; a tampered client could lie.
 - **Anyone with the link can join** until the room has two players. Share it only with your opponent.
 - **Clients trust each other.** There is no server to enforce the rules, so a determined cheater could tamper with their own browser. It's meant for friends.
 - The signing library ([`@noble/curves`](https://github.com/paulmillr/noble-curves)) is loaded from the [esm.sh](https://esm.sh) CDN, so an internet connection is required.

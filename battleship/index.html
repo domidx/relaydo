@@ -1,0 +1,24 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Battleship · Relaydo</title><link rel="stylesheet" href="../css/style.css"><script src="../js/theme.js"></script><link rel="stylesheet" href="battleship.css"></head><body>
+<header class="bar" id="bar"></header>
+<main class="wrap">
+ <section id="lobby" class="panel">
+  <div id="choose"><h2>Play Battleship</h2>
+   <div class="row"><button id="host" class="primary">Host a game</button></div>
+   <p class="status">…or join with an invite link:</p>
+   <div class="row"><input type="text" id="joinlink" placeholder="Paste invite link"><button id="join">Join</button></div></div>
+  <div id="invite-box" class="hidden"><div class="row"><input type="text" id="invite" readonly><button id="copy">Copy</button></div></div>
+  <div class="row"><button id="start" class="primary hidden">Start game</button></div>
+  <p class="status" id="status"></p><p class="status" id="relays"></p>
+ </section>
+ <section id="game" class="hidden">
+  <div class="turn" id="gstatus"></div><div class="status" id="log" style="text-align:center"></div>
+  <div id="setup" class="panel"><p class="status">Pick a ship, then click the grid to place it (click a placed ship to pick it up again). Or let the app shuffle for you.</p>
+   <div class="row" id="ships"></div>
+   <div class="row"><button id="rot">Direction: Horizontal</button><button id="rand">🎲 Random</button><button id="clear">Clear</button><button id="ready" class="primary" disabled>Ready</button></div></div>
+  <div id="enemywrap" class="hidden"><h3>Enemy waters</h3><div id="enemy" class="bs"></div></div>
+  <h3>Your fleet</h3><div id="own" class="bs"></div>
+ </section>
+ <dialog id="rules"></dialog>
+</main>
+<script type="module" src="battleship.js"></script></body></html>
