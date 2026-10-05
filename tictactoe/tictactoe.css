@@ -1,0 +1,5 @@
+#ttt{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:360px;margin:14px auto;background:var(--accent);padding:8px;border-radius:14px}
+.sq{aspect-ratio:1;border:0;border-radius:10px;background:var(--bg);font:700 clamp(2.6rem,14vw,4.5rem) Georgia,serif;line-height:1;padding:0;color:var(--text)}
+.sq.p0{color:var(--p0)}.sq.p1{color:var(--p1)}
+.sq.win{box-shadow:inset 0 0 0 4px var(--text)}
+#ttt.mine .sq:empty:hover{background:var(--surface)}
