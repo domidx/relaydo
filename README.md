@@ -2,6 +2,8 @@
 
 **Tiny two-player games you can play with a friend by just sharing a link.**
 
+🎮 **Play it here: https://domidx.github.io/relaydo/**
+
 No accounts, no backend, no installs. Relaydo is a static website (plain HTML, CSS and JavaScript) hosted on GitHub Pages. The players talk to each other through public [Nostr](https://nostr.com) relays.
 
 > This is just a fun hobby project, built for the joy of it. It's not a product, it's not cheat-proof, and it comes with no guarantees. Have fun and be nice. 🙂
@@ -72,7 +74,7 @@ To test with two players, open the invite link in a second browser (or a private
 
 1. Create a repository named `relaydo` and push these files to `main`.
 2. Go to **Settings → Pages** and choose **Deploy from a branch**: `main`, folder `/ (root)`.
-3. The site goes live at `https://<username>.github.io/relaydo/`.
+3. The site goes live at `https://<username>.github.io/relaydo/` (for this repo: https://domidx.github.io/relaydo/).
 
 ## Adding a game
 
