@@ -43,3 +43,7 @@ button{min-height:40px}
   input[type=text]{min-width:0;width:100%}
   .grid{grid-template-columns:1fr 1fr}
 }
+
+/* Game status banner, shared by every game ("Your turn", "Opponent's turn…", results) */
+#gstatus{text-align:center;font:700 1.6rem Georgia,serif;margin:12px 0;padding:10px 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+@media (max-width:560px){#gstatus{font-size:1.3rem;padding:8px}}

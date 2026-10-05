@@ -3,6 +3,5 @@
 .cell.p0{background:var(--p0)}.cell.p1{background:var(--p1)}
 .cell.win{box-shadow:0 0 0 4px var(--text)}
 #board.mine .cell:not(.p0):not(.p1):hover{background:color-mix(in srgb,var(--hole),var(--text) 18%)}
-.turn{text-align:center;font:700 1.2rem Georgia,serif}
 .dot{display:inline-block;width:.9em;height:.9em;border-radius:50%;vertical-align:-.1em}
 @media (max-width:560px){#board{gap:4px;padding:6px;border-radius:10px}}

@@ -89,6 +89,7 @@ export function initGame({name,rules,max=1,onStart,onMessage,onPlayerLeft,onEnd}
 
   $('host').onclick=async()=>{
     try{await loadNet()}catch{status('Could not load the network library (check your internet connection / use a web server, not file://).');return}
+    if(nameBox)try{localStorage.setItem('relaydo-name',nameBox.value)}catch{}
     room=Room.host();wire();
     $('invite').value=room.invite();$('invite-box').classList.remove('hidden');
     hostStatus();

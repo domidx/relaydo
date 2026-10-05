@@ -1,5 +1,5 @@
 import {initGame} from '../js/shell.js';
-// Host = dealer and single source of truth. Guests send {act: hit|stand}; host broadcasts the public table state.
+// Host's browser runs the (automated) dealer and is the single source of truth; the host also plays as a normal seat. Guests send {act: hit|stand}; host broadcasts the public table state.
 // The dealer's hole card is only included in the broadcast once it is revealed.
 const SU=['♠','♥','♦','♣'],RK=['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
 const $=id=>document.getElementById(id);
@@ -12,18 +12,18 @@ const newDeck=()=>{const d=[];for(let s=0;s<4;s++)for(let r=0;r<13;r++)d.push([r
 
 initGame({
   name:'Blackjack',max:5,
-  rules:`<p>The host is the <b>dealer</b> (and doesn't play); up to 5 players sit at the table. Everyone plays against the dealer, not each other.</p>
+  rules:`<p>Up to 6 players sit at the table: the host plus up to 5 guests. The dealer is automatic (run by the host's browser). Everyone plays against the dealer, not each other.</p>
   <p>Get closer to <b>21</b> than the dealer without going over. Cards 2–10 count face value, J/Q/K are 10, an ace is 11 or 1. On your turn: <b>Hit</b> to take a card, or <b>Stand</b> to stop.</p>
   <p>The dealer draws until reaching 17 or more. A two-card 21 is a <b>Blackjack</b> and beats any other 21. Same total = push (tie). No betting, splitting or doubling — the table just keeps a Win–Lose–Push tally.</p>`,
   onStart:({role,send:s,pid,players:pl})=>{
     host=role==='host';send=s;myPid=pid;S=null;phase='idle';dealer=[];hole=true;turn=null;
-    if(host){players=pl.map(x=>({pid:x.pid,name:x.name,hand:[],st:'wait',res:null,w:0,l:0,p:0}));push()}
+    if(host){const hn=($('myname')&&$('myname').value.trim())||'Host';
+      players=[{pid:myPid,name:hn.slice(0,16)},...pl].map(x=>({pid:x.pid,name:x.name,hand:[],st:'wait',res:null,w:0,l:0,p:0}));push()}
     render();
   },
   onPlayerLeft:pid=>{
     if(!host)return;
     players=players.filter(p=>p.pid!==pid);
-    if(!players.length){clearTimeout(timer);phase='idle';turn=null;dealer=[];push();return}
     if(phase==='players')advance();else push();
   },
   onMessage:(t,d,from)=>{
@@ -80,12 +80,12 @@ function resolve(){
 const card=c=>c?`<span class="card${c[1]===1||c[1]===2?' red':''}">${RK[c[0]]}<small>${SU[c[1]]}</small></span>`:'<span class="card back"></span>';
 function render(){
   const g=$('gstatus');
-  if(!S){g.textContent=host?'Setting up the table…':'Waiting for the dealer to deal…';$('deal').classList.add('hidden');$('hit').classList.add('hidden');$('stand').classList.add('hidden');return}
+  if(!S){g.textContent=host?'Setting up the table…':'Waiting for the host to deal…';$('deal').classList.add('hidden');$('hit').classList.add('hidden');$('stand').classList.add('hidden');return}
   const tp=S.players.find(p=>p.pid===S.turn),mine=S.turn===myPid;
-  g.textContent=S.phase==='idle'?(host?(S.players.length?'Press Deal to start a round':'All players have left'):'Waiting for the dealer to deal…')
+  g.textContent=S.phase==='idle'?(host?'Press Deal to start a round':'Waiting for the host to deal…')
     :S.phase==='players'?(mine?'Your turn — hit or stand?':`Waiting for ${tp?tp.name:'player'}…`)
     :S.phase==='dealer'?'Dealer is playing…':'Round over';
-  $('dealer').innerHTML=`<div class="nm">Dealer${host?' (you)':''}</div><div class="hand">${S.dealer.map(card).join('')}</div><div class="tot">${S.dealer.length?'Total: '+S.dv:''}</div>`;
+  $('dealer').innerHTML=`<div class="nm">Dealer</div><div class="hand">${S.dealer.map(card).join('')}</div><div class="tot">${S.dealer.length?'Total: '+S.dv:''}</div>`;
   $('seats').innerHTML=S.players.map(p=>{
     const b=p.res||(p.st==='bust'?'Bust':p.st==='bj'?'Blackjack!':'');
     return `<div class="seat${p.pid===S.turn?' turn':''}"><span class="nm">${esc(p.name)}${p.pid===myPid?' (you)':''}</span>${b?`<span class="badge ${b.replace('!','').toLowerCase()}">${b}</span>`:''}
@@ -93,9 +93,10 @@ function render(){
   }).join('');
   $('deal').textContent=S.phase==='done'?'Next round':'Deal';
   $('deal').classList.toggle('hidden',!(host&&(S.phase==='idle'||S.phase==='done')&&S.players.length));
-  const my=!host&&S.phase==='players'&&mine;
+  const my=S.phase==='players'&&mine;
   $('hit').classList.toggle('hidden',!my);$('stand').classList.toggle('hidden',!my);
 }
 $('deal').onclick=deal;
-$('hit').onclick=()=>send('act',{move:'hit'});
-$('stand').onclick=()=>send('act',{move:'stand'});
+const play=m=>host?act(myPid,m):send('act',{move:m});
+$('hit').onclick=()=>play('hit');
+$('stand').onclick=()=>play('stand');
