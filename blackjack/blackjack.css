@@ -1,0 +1,12 @@
+.hand{display:flex;gap:6px;flex-wrap:wrap;min-height:76px;align-items:center;margin:6px 0}
+.card{width:50px;height:72px;border-radius:7px;background:#f7efef;color:#222;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;font:700 1.15rem Georgia,serif;line-height:1.1;box-shadow:0 1px 4px #0006}
+.card small{font-size:1.2rem}
+.card.red{color:#b0243a}
+.card.back{background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 6px,var(--accent-hi) 6px,var(--accent-hi) 12px);border:2px solid #f7efef}
+.seat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin:10px 0}
+.seat.turn{border-color:var(--p1);box-shadow:0 0 0 2px var(--p1)}
+.nm{font-weight:700}.tot,.tally{color:var(--muted);font-size:.9rem}
+.badge{display:inline-block;margin-left:8px;padding:1px 10px;border-radius:99px;font-size:.85rem;font-weight:700;background:var(--line)}
+.badge.win,.badge.blackjack{background:#2f7d4a;color:#fff}.badge.lose,.badge.bust{background:var(--p0);color:#fff}
+.ctl{justify-content:center}.ctl button{min-width:110px}
+@media (max-width:560px){.card{width:42px;height:60px;font-size:1rem}.card small{font-size:1rem}}

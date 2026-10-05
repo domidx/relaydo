@@ -1,0 +1,21 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blackjack · Relaydo</title><link rel="stylesheet" href="../css/style.css"><script src="../js/theme.js"></script><link rel="stylesheet" href="blackjack.css"></head><body>
+<header class="bar" id="bar"></header>
+<main class="wrap">
+ <section id="lobby" class="panel">
+  <div id="choose"><h2>Play Blackjack</h2>
+   <div class="row"><button id="host" class="primary">Host a game (you are the dealer)</button></div>
+   <p class="status">…or join a table with an invite link (up to 5 players):</p>
+   <div class="row"><input type="text" id="myname" maxlength="16" placeholder="Your name"></div>
+   <div class="row"><input type="text" id="joinlink" placeholder="Paste invite link"><button id="join">Join</button></div></div>
+  <div id="invite-box" class="hidden"><div class="row"><input type="text" id="invite" readonly><button id="copy">Copy</button></div></div>
+  <div class="row"><button id="start" class="primary hidden">Start game</button></div>
+  <p class="status" id="status"></p><p class="status" id="relays"></p>
+ </section>
+ <section id="game" class="hidden"><div class="turn" id="gstatus"></div>
+  <div class="seat" id="dealer"></div><div id="seats"></div>
+  <div class="row ctl"><button id="deal" class="primary hidden">Deal</button><button id="hit" class="primary hidden">Hit</button><button id="stand" class="hidden">Stand</button></div>
+ </section>
+ <dialog id="rules"></dialog>
+</main>
+<script type="module" src="blackjack.js"></script></body></html>
