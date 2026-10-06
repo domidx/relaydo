@@ -1,0 +1,13 @@
+h3{text-align:center;font:700 1.1rem Georgia,serif;margin:14px 0 4px}
+.plist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.pl{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:3px 12px;font-size:.9rem}
+.pl.cur{border-color:var(--p1);box-shadow:0 0 0 2px var(--p1);font-weight:700}
+.tablecard{display:flex;justify-content:center;align-items:center;gap:14px;margin:10px 0;min-height:86px}
+.hand{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.uc{display:inline-flex;align-items:center;justify-content:center;width:54px;height:80px;padding:0;border-radius:9px;border:3px solid #f7efef;color:#fff;font:700 1.3rem Georgia,serif;box-shadow:0 1px 4px #0006}
+.uc.c0{background:#c8323c}.uc.c1{background:#e8b84a;color:#222}.uc.c2{background:#2f9e5a}.uc.c3{background:#2f6fc9}
+.uc.c4{background:conic-gradient(#c8323c 0 25%,#e8b84a 0 50%,#2f9e5a 0 75%,#2f6fc9 0);text-shadow:0 0 4px #000}
+button.uc{cursor:pointer}button.uc.dim{opacity:.4}
+.dot{width:1.4em;height:1.4em;border:2px solid #f7efef}
+.ctl{justify-content:center}.ctl button{min-width:100px}
+@media (max-width:560px){.uc{width:44px;height:66px;font-size:1.05rem}}

@@ -1,0 +1,8 @@
+.hand{display:flex;gap:6px;flex-wrap:wrap;min-height:76px;align-items:center;margin:6px 0}
+.card{width:50px;height:72px;border-radius:7px;background:#f7efef;color:#222;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;font:700 1.15rem Georgia,serif;line-height:1.1;box-shadow:0 1px 4px #0006}
+.card small{font-size:1.2rem}.card.red{color:#b0243a}
+.card.back{background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 6px,var(--accent-hi) 6px,var(--accent-hi) 12px);border:2px solid #f7efef;width:34px}
+.seat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin:10px 0}
+.nm{font-weight:700}
+.ctl{justify-content:center}.ctl button{min-width:110px}
+@media (max-width:560px){.card{width:42px;height:60px;font-size:1rem}.card.back{width:28px}.card small{font-size:1rem}}

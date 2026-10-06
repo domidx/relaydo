@@ -15,9 +15,11 @@ No accounts, no backend, no installs. Relaydo is a static website (plain HTML, C
 | Game | Players |
 |------|---------|
 | Battleship | 2 (place ships by hand or with **Random**) |
-| Blackjack | 2–6 (the host plays too; the dealer is automatic) |
+| Blackjack | 2-6 (the host plays too; the dealer is automatic) |
 | Connect 4 | 2 |
 | Tic-tac-toe | 2 |
+| Uno | 2-6 (the host plays too) |
+| War | 2 (with an Auto-flip option) |
 
 More simple games may follow.
 
@@ -33,7 +35,7 @@ Every game page has **⌂ Relaydo** (home), a light/dark theme toggle (dark is t
 
 ## How it works
 
-- Players exchange small messages as **ephemeral Nostr events** (kind `24242`, inside the 20000–29999 range that relays forward but don't store).
+- Players exchange small messages as **ephemeral Nostr events** (kind `24242`, inside the 20000-29999 range that relays forward but don't store).
 - The invite link looks like `https://<user>.github.io/relaydo/connect4/#r=<room>&k=<key>`. The room ID and a random secret key live in the URL **fragment** (after `#`), which browsers never send to any server.
 - Every message is encrypted with **AES-GCM** using that key, so relay operators only see opaque data.
 - Each browser session signs its events with a **throwaway random Nostr keypair**. Nothing is persisted and nothing identifies you.
@@ -48,6 +50,7 @@ relaydo/
 ├── index.html          hub homepage
 ├── css/style.css       common styles, light/dark themes
 ├── js/
+│   ├── util.js         shuffle and HTML-escape helpers
 │   ├── theme.js        theme toggle and Home button
 │   ├── net.js          Nostr networking (shared by all games)
 │   └── shell.js        toolbar, host/join lobby, handshake (shared)
@@ -63,10 +66,18 @@ relaydo/
 │   ├── index.html
 │   ├── connect4.js
 │   └── connect4.css
-└── tictactoe/
+├── tictactoe/
+│   ├── index.html
+│   ├── tictactoe.js
+│   └── tictactoe.css
+├── uno/
+│   ├── index.html
+│   ├── uno.js
+│   └── uno.css
+└── war/
     ├── index.html
-    ├── tictactoe.js
-    └── tictactoe.css
+    ├── war.js
+    └── war.css
 ```
 
 ## Run locally
@@ -113,6 +124,8 @@ To test with two players, open the invite link in a second browser (or a private
 - **Closing a tab isn't detected.** Pressing **Leave** (or Home) notifies the opponent, but a silently closed tab or dropped connection doesn't. A heartbeat for this exists in `js/shell.js` and is commented out.
 - **No reconnecting or saved games.** If a player reloads mid-game, the game is over.
 - **Blackjack is host-authoritative.** The host's browser holds the deck, runs the automatic dealer and also plays a seat, so a determined host could peek at the deck or the dealer's face-down card using browser developer tools. The dealer's hole card is never *sent* to guests until it is revealed, but we trust the host not to look. Rules are simplified (no betting, splitting, doubling or insurance), nobody can join once a round has started, and if the host leaves the table ends.
+- **Uno is host-authoritative.** The host's browser keeps every hand and sends each guest only their own, addressed to them. Everyone in a room shares one encryption key, though, so someone using browser developer tools could read other players' hands. We trust each other. House rules: no stacking of +2/+4, wilds can be played any time, and "UNO!" is shown automatically.
+- **War is host-authoritative too** (the host shuffles and deals). It is pure luck, so there's little to cheat.
 - **Battleship is trust-based.** Each player's browser holds their own fleet and answers the opponent's shots honestly; a tampered client could lie.
 - **Anyone with the link can join** until the room has two players. Share it only with your opponent.
 - **Clients trust each other.** There is no server to enforce the rules, so a determined cheater could tamper with their own browser. It's meant for friends.
