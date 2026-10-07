@@ -1,0 +1,26 @@
+.plist{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.pl{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:3px 12px;font-size:.9rem}
+.pl.cur{border-color:var(--p1);box-shadow:0 0 0 2px var(--p1);font-weight:700}
+.pl i{display:inline-block;width:.8em;height:.8em;border-radius:50%;margin-right:5px}
+:root{--k0:#c8323c;--k1:#2f9e5a;--k2:#e8b84a;--k3:#2f6fc9;--route:#51454a;--blank:#241a1e}
+:root[data-theme=light]{--route:#fff;--blank:#e6d8db}
+#board{display:grid;grid-template-columns:repeat(15,var(--c,20px));grid-template-rows:repeat(15,var(--c,20px));gap:0;padding:var(--p,2px);width:calc(15*var(--c,20px) + 2*var(--p,2px));height:calc(15*var(--c,20px) + 2*var(--p,2px));margin:8px auto;background:var(--line);border-radius:10px} /* --c/--p are set by fit() in ludo.js (whole device pixels). Dividers are cell borders, not gaps, so they can never be rounded away. */ /* --c/--g/--p are set by fit() in ludo.js so every cell and divider is a whole number of device pixels */
+.cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0;min-height:0;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--blank)}
+.cell.tr{background:var(--route)}
+.cell.star::before{content:"★";position:absolute;color:#fff;font-size:.8rem;opacity:.55}
+:root[data-theme=light] .cell.star::before{color:#777}
+.cell.st0,.cell.hc0,.cell.yd.yc0{background:var(--k0)}.cell.st1,.cell.hc1,.cell.yd.yc1{background:var(--k1)}
+.cell.st2,.cell.hc2,.cell.yd.yc2{background:var(--k2)}.cell.st3,.cell.hc3,.cell.yd.yc3{background:var(--k3)}
+.cell.yd::before{content:"";position:absolute;inset:16%;border-radius:50%;background:rgba(255,255,255,.3)}
+#centre{grid-area:7/7/10/10;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--k1) 0 25%,var(--k2) 0 50%,var(--k3) 0 75%,var(--k0) 0)}
+.cc{width:80%;aspect-ratio:1;border-radius:50%;background:var(--surface);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.1;overflow:hidden;box-shadow:0 0 0 3px #fff9}
+.cc button{width:100%;height:100%;min-height:0;border-radius:50%;padding:4px;font-weight:700;font-size:.85rem}
+.cc .big{font:700 2.4rem Georgia,serif}
+.cc small{font-size:.7rem;color:var(--muted);padding:0 6px}
+.cc i{display:inline-block;width:.9em;height:.9em;border-radius:50%;margin-bottom:3px}
+.pc{width:80%;height:auto;aspect-ratio:1;min-height:0;min-width:0;padding:0;border-radius:50%;border:2px solid #f7efef;box-shadow:0 1px 3px #0008;cursor:default;position:relative;z-index:1}
+.cell.multi .pc{width:46%;border-width:1px}
+.pc.k0{background:var(--k0)}.pc.k1{background:var(--k1)}.pc.k2{background:var(--k2)}.pc.k3{background:var(--k3)}
+.pc.sel{cursor:pointer;animation:pulse .9s infinite alternate;border-color:#fff}
+@keyframes pulse{to{box-shadow:0 0 0 4px #fff,0 0 8px 4px #fff8}}
+@media (max-width:560px){.cc .big{font-size:1.7rem}.cc button{font-size:.65rem}.cc small{font-size:.6rem}}

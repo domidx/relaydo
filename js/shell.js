@@ -56,7 +56,7 @@ export function initGame({name,rules,max=1,onStart,onMessage,onPlayerLeft,onEnd}
         peer=true;room.hostPid=from;clearInterval(room.hello);roster=data.players||[];guestStatus();
       }else if(type==='roster'&&!host&&peer&&!started){roster=data.players||[];guestStatus()}
       else if(type==='full'&&!host&&data.to===room.pid){clearInterval(room.hello);reset(data.started?'This game has already started.':'This game is full.')}
-      else if(type==='start'&&!host&&peer&&from===room.hostPid){roster=data.players||[];begin()}
+      else if(type==='start'&&!host&&peer&&from===room.hostPid){roster=data.players||[];begin(data.host)}
       else if(type==='leave'){
         if(host){
           if(!peers.has(from))return;
@@ -82,9 +82,9 @@ export function initGame({name,rules,max=1,onStart,onMessage,onPlayerLeft,onEnd}
     },5000);
     */
   }
-  function begin(){
+  function begin(hostInfo){
     started=true;$('lobby').classList.add('hidden');$('game').classList.remove('hidden');
-    onStart({role:room.role,send:(t,d)=>room.send(t,d),pid:room.pid,players:room.role==='host'?list():roster});
+    onStart({role:room.role,send:(t,d)=>room.send(t,d),pid:room.pid,host:hostInfo,players:room.role==='host'?list():roster}); // players = guests only; host = {pid,name} of the host
   }
 
   $('host').onclick=async()=>{
@@ -95,7 +95,10 @@ export function initGame({name,rules,max=1,onStart,onMessage,onPlayerLeft,onEnd}
     hostStatus();
   };
   $('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('invite').value);$('copy').textContent='Copied'}catch{$('invite').select()}};
-  $('start').onclick=()=>{room.send('start',{players:list()});begin()};
+  $('start').onclick=()=>{
+    const hostInfo={pid:room.pid,name:((nameBox&&nameBox.value.trim())||'Host').slice(0,16)};
+    room.send('start',{players:list(),host:hostInfo});begin(hostInfo);
+  };
   const join=async link=>{
     try{await loadNet()}catch{status('Could not load the network library (check your internet connection / use a web server, not file://).');return}
     try{room=Room.fromInvite(link)}catch{status('That invite link is not valid.');return}

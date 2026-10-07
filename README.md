@@ -17,6 +17,7 @@ No accounts, no backend, no installs. Relaydo is a static website (plain HTML, C
 | Battleship | 2 (place ships by hand or with **Random**) |
 | Blackjack | 2-6 (the host plays too; the dealer is automatic) |
 | Connect 4 | 2 |
+| Ludo | 2-4 (colours assigned automatically; the host is red) |
 | Tic-tac-toe | 2 |
 | Uno | 2-6 (the host plays too) |
 | War | 2 (with an Auto-flip option) |
@@ -35,7 +36,7 @@ Every game page has **⌂ Relaydo** (home), a light/dark theme toggle (dark is t
 
 ## How it works
 
-- Players exchange small messages as **ephemeral Nostr events** (kind `24242`, inside the 20000-29999 range that relays forward but don't store).
+- Players exchange small messages as **ephemeral Nostr events** (kind `24242`, inside the 20000–29999 range that relays forward but don't store).
 - The invite link looks like `https://<user>.github.io/relaydo/connect4/#r=<room>&k=<key>`. The room ID and a random secret key live in the URL **fragment** (after `#`), which browsers never send to any server.
 - Every message is encrypted with **AES-GCM** using that key, so relay operators only see opaque data.
 - Each browser session signs its events with a **throwaway random Nostr keypair**. Nothing is persisted and nothing identifies you.
@@ -66,6 +67,10 @@ relaydo/
 │   ├── index.html
 │   ├── connect4.js
 │   └── connect4.css
+├── ludo/
+│   ├── index.html
+│   ├── ludo.js
+│   └── ludo.css
 ├── tictactoe/
 │   ├── index.html
 │   ├── tictactoe.js
@@ -109,7 +114,7 @@ To test with two players, open the invite link in a second browser (or a private
      name: 'My Game',
      rules: '<p>Explain the rules in HTML.</p>',
      max: 1, // guests the host accepts: 1 = two-player game, 5 = a table of six
-     onStart: ({role, send, pid, players}) => { /* role is 'host' or 'guest'; send(type, data) messages everyone in the room */ },
+     onStart: ({role, send, pid, host, players}) => { /* role is 'host' or 'guest'; send(type, data) messages everyone in the room; players = guests only, host = {pid, name} */ },
      onMessage: (type, data, from) => { /* handle messages; 'from' identifies the sender */ },
      onPlayerLeft: (pid) => { /* multiplayer only: a guest left mid-game (called on the host) */ },
    });
@@ -124,6 +129,7 @@ To test with two players, open the invite link in a second browser (or a private
 - **Closing a tab isn't detected.** Pressing **Leave** (or Home) notifies the opponent, but a silently closed tab or dropped connection doesn't. A heartbeat for this exists in `js/shell.js` and is commented out.
 - **No reconnecting or saved games.** If a player reloads mid-game, the game is over.
 - **Blackjack is host-authoritative.** The host's browser holds the deck, runs the automatic dealer and also plays a seat, so a determined host could peek at the deck or the dealer's face-down card using browser developer tools. The dealer's hole card is never *sent* to guests until it is revealed, but we trust the host not to look. Rules are simplified (no betting, splitting, doubling or insurance), nobody can join once a round has started, and if the host leaves the table ends.
+- **Ludo is peer-validated, not host-authoritative.** Every browser holds the full game and applies the same ordered moves. Each player rolls their own die and broadcasts it, and every other browser checks that the sender is the player whose turn it is and that the move is legal, ignoring anything else. Nobody can verify that a roll was truly random, so a determined player could tamper with their own roll. Rules: a 6 brings a piece out and gives another roll (three 6s lose the turn), captures send pieces home except on ★ and start squares, and an exact roll is needed to reach the centre. If a player leaves, their pieces are removed. If the host leaves, the game ends.
 - **Uno is host-authoritative.** The host's browser keeps every hand and sends each guest only their own, addressed to them. Everyone in a room shares one encryption key, though, so someone using browser developer tools could read other players' hands. We trust each other. House rules: no stacking of +2/+4, wilds can be played any time, and "UNO!" is shown automatically.
 - **War is host-authoritative too** (the host shuffles and deals). It is pure luck, so there's little to cheat.
 - **Battleship is trust-based.** Each player's browser holds their own fleet and answers the opponent's shots honestly; a tampered client could lie.
