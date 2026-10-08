@@ -9,9 +9,11 @@
 .cell.tr{background:var(--route)}
 .cell.star::before{content:"★";position:absolute;color:#fff;font-size:.8rem;opacity:.55}
 :root[data-theme=light] .cell.star::before{color:#777}
-.cell.st0,.cell.hc0,.cell.yd.yc0{background:var(--k0)}.cell.st1,.cell.hc1,.cell.yd.yc1{background:var(--k1)}
-.cell.st2,.cell.hc2,.cell.yd.yc2{background:var(--k2)}.cell.st3,.cell.hc3,.cell.yd.yc3{background:var(--k3)}
-.cell.yd::before{content:"";position:absolute;inset:16%;border-radius:50%;background:rgba(255,255,255,.3)}
+.cell.st0,.cell.hc0,.cell.rc0{background:var(--k0)}.cell.st1,.cell.hc1,.cell.rc1{background:var(--k1)}
+.cell.st2,.cell.hc2,.cell.rc2{background:var(--k2)}.cell.st3,.cell.hc3,.cell.rc3{background:var(--k3)}
+/* 6x6 home: coloured outer ring, route-coloured inside, pieces on the middle 2x2 */
+.cell.yin{background:var(--route)}
+.cell.slot::before{content:"";position:absolute;inset:14%;border-radius:50%;background:rgba(0,0,0,.2)}
 #centre{grid-area:7/7/10/10;border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-width:0;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--k1) 0 25%,var(--k2) 0 50%,var(--k3) 0 75%,var(--k0) 0)}
 .cc{width:80%;aspect-ratio:1;border-radius:50%;background:var(--surface);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.1;overflow:hidden;box-shadow:0 0 0 3px #fff9}
 .cc button{width:100%;height:100%;min-height:0;border-radius:50%;padding:4px;font-weight:700;font-size:.85rem}

@@ -23,9 +23,10 @@ for(let c=5;c>=0;c--)add(8,c);
 add(7,0);add(6,0);
 const START=[0,13,26,39],SAFE=new Set([0,8,13,21,26,34,39,47]);
 const HOME=[[1,2,3,4,5].map(c=>[7,c]),[1,2,3,4,5].map(r=>[r,7]),[13,12,11,10,9].map(c=>[7,c]),[13,12,11,10,9].map(r=>[r,7])];
-const YARD=[[[2,2],[2,3],[3,2],[3,3]],[[2,11],[2,12],[3,11],[3,12]],[[11,11],[11,12],[12,11],[12,12]],[[11,2],[11,3],[12,2],[12,3]]]; // 2x2 homes
+const YARD=[[[2,2],[2,3],[3,2],[3,3]],[[2,11],[2,12],[3,11],[3,12]],[[11,11],[11,12],[12,11],[12,12]],[[11,2],[11,3],[12,2],[12,3]]]; // middle 2x2 of each 6x6 home
 const TR=new Map(TRACK.map(([r,c],i)=>[r+','+c,i])),HM=new Map(HOME.flatMap((a,k)=>a.map(([r,c])=>[r+','+c,k])));
 const SLOT=new Map(YARD.flatMap((a,k)=>a.map(([r,c])=>[r+','+c,k])));
+const yardOf=(r,c)=>{const k=r<6&&c<6?0:r<6&&c>8?1:r>8&&c>8?2:r>8&&c<6?3:-1;if(k<0)return null;const lr=r%9,lc=c%9;return {k,ring:lr===0||lr===5||lc===0||lc===5}}; // 6x6 corner: ring + inside
 const cellOf=(col,p,i)=>p<0?YARD[col][i]:p<=50?TRACK[(START[col]+p)%52]:p<56?HOME[col][p-51]:null;
 
 // ---- game state ----
@@ -148,7 +149,8 @@ function render(){
     (mine?'Pick a piece to move':`${P.name} is choosing a piece…`);
   $('log').textContent=G.log;
   $('plist').innerHTML=G.players.map((p,i)=>`<span class="pl${i===G.turn&&G.phase!=='over'?' cur':''}"><i style="background:var(--k${p.col})"></i>${esc(p.name)}${p.pid===myPid?' (you)':''} · ${p.pos.filter(x=>x===56).length}/4 home</span>`).join('');
-  const sel=mine&&G.phase==='move'?legal(P,G.roll):[],by={};
+  // glow only pieces that can legally move; pieces on the same square (e.g. several in the yard) make the same move, so glow one
+  const sel=mine&&G.phase==='move'?(()=>{const seen=new Set();return legal(P,G.roll).filter(i=>!seen.has(P.pos[i])&&seen.add(P.pos[i]))})():[],by={};
   G.players.forEach(p=>p.pos.forEach((q,i)=>{
     const k=p.pid+':'+i,c=cellOf(p.col,ov[k]!==undefined?ov[k]:q,i);
     if(c)(by[c[0]+','+c[1]]=by[c[0]+','+c[1]]||[]).push([p,i]);
@@ -156,9 +158,9 @@ function render(){
   let h=`<div id="centre"><div class="cc">${centre(P,mine)}</div></div>`;
   for(let r=0;r<15;r++)for(let c=0;c<15;c++){
     if(r>=6&&r<=8&&c>=6&&c<=8)continue; // centre is one element
-    const k=r+','+c,ti=TR.get(k),hc=HM.get(k),yc=SLOT.get(k);
+    const k=r+','+c,ti=TR.get(k),hc=HM.get(k),ya=yardOf(r,c);
     let cls=ti!==undefined?'tr'+(START.includes(ti)?' st'+START.indexOf(ti):SAFE.has(ti)?' star':''):hc!==undefined?'hm hc'+hc
-      :yc!==undefined?'yd yc'+yc:'blank';
+      :ya?(ya.ring?'ring rc'+ya.k:'yin'+(SLOT.has(k)?' slot':'')):'blank';
     const ps=by[k]||[];if(ps.length>1)cls+=' multi';
     h+=`<div class="cell ${cls}">${ps.map(([p,i])=>`<button class="pc k${p.col}${p===P&&sel.includes(i)?' sel':''}" data-i="${i}" aria-label="${COLN[p.col]} piece"></button>`).join('')}</div>`;
   }
